@@ -27,6 +27,86 @@
             <p>Your voice data is not stored and is only processed for converting speech to text.</p>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const startBtn = document.getElementById('start-btn');
+const stopBtn = document.getElementById('stop-btn');
+const resetBtn = document.getElementById('reset-btn');
+const saveBtn = document.getElementById('save-btn');
+const output = document.getElementById('output');
+const timerDisplay = document.getElementById('timer');
+
+let recognition;
+let transcript = '';
+let recordingInterval;
+let recordingTime = 0; // Track the recording time
+
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = true; // Allow continuous speech recognition
+    recognition.interimResults = true; // Get interim results
+
+    recognition.onresult = function(event) {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+                transcript += result[0].transcript + ' ';
+                output.value = transcript; // Update the textarea with the final transcript
+            } else {
+                output.value = transcript + result[0].transcript; // Update with interim results
+            }
+        }
+    };
+
+    recognition.onerror = function(event) {
+        console.error('Error occurred in recognition: ' + event.error);
+        alert('Error: ' + event.error);
+    };
+
+    recognition.onend = function() {
+        console.log('Speech recognition ended');
+        clearInterval(recordingInterval); // Stop the timer
+    };
+
+    startBtn.addEventListener('click', () => {
+        transcript = ''; // Reset transcript when starting new recording
+        output.value = '';
+        recordingTime = 0; // Reset recording time
+        timerDisplay.textContent = '0:00'; // Reset timer display
+        recognition.start();
+
+        // Start the timer
+        recordingInterval = setInterval(() => {
+            recordingTime++;
+            const minutes = Math.floor(recordingTime / 60);
+            const seconds = recordingTime % 60;
+            timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }, 1000);
+    });
+
+    stopBtn.addEventListener('click', () => {
+        recognition.stop();
+        clearInterval(recordingInterval); // Stop the timer
+    });
+} else {
+    alert('Speech recognition not supported in this browser. Please use Google Chrome.');
+}
+
+resetBtn.addEventListener('click', () => {
+    output.value = '';
+    transcript = '';
+    clearInterval(recordingInterval); // Stop the timer
+    timerDisplay.textContent = '0:00'; // Reset timer display
+});
+
+// Save functionality
+saveBtn.addEventListener('click', () => {
+    const blob = new Blob([transcript], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'transcript.txt';
+    link.click();
+});
+
+    </script>
 </body>
 </html>
