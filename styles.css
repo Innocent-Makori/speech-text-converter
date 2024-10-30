@@ -1,0 +1,45 @@
+                                                                                        body {
+    font-family: Arial, sans-serif;
+    background-color:purple;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: orange;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+  background-color:blue;
+}
+
+.timer {
+    margin-bottom: 20px;
+}
+
+.text-display {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    resize: none;
+}
+
+.privacy-policy {
+    margin-top: 20px;
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
